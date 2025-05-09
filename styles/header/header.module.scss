@@ -1,0 +1,41 @@
+@use '@/colors' as *;
+
+$padding: 20px;
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    background-image: linear-gradient(90deg, $accent, $secondary);
+    background-clip: text;
+    color: transparent;
+    width: calc(100% - 2 * $padding);
+    position: relative;
+    padding: $padding;
+    
+    height: calc(150px - $padding * 2);
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    @media screen and (min-width: $min-width) {
+        height: calc(100px - $padding * 2);
+        flex-direction: row;    
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.header::before {
+    $height: 3px;
+    content: '';
+    position: absolute;
+    display: inline-block;
+    bottom: calc(0% + $padding - $height);
+    width: calc(100% - 2 * $padding);
+    background-image: linear-gradient(90deg, $accent 10%, $secondary 90%);
+    
+    height: $height;
+    @media screen and (min-width: $min-width) {
+        $height: 4px;
+        height: $height;
+    }
+}

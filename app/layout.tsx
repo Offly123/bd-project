@@ -1,4 +1,19 @@
+'use client'
+
 import React from 'react';
+import localFont from 'next/font/local';
+
+import Header from '$/Header';
+import Footer from '$/Footer';
+
+import style from '@/layout.module.scss';
+import '@/global.scss';
+
+const manrope = localFont({
+    src: '../fonts/Manrope-VariableFont_wght.ttf'
+});
+
+
 
 export default function Layout({ 
     children 
@@ -6,11 +21,15 @@ export default function Layout({
     children: React.ReactNode
 }) {
     return (
-        <html>
-            <head></head>
+        <html lang='ru' className={manrope.className}>
+            <head>
+                <title>Название сайта</title>
+                <link rel="icon" href="#" />
+            </head>
             <body>
-                <div>Взорванный хэдер</div>
+                <Header />
                 <main>{ children }</main>
+                <Footer />
             </body>
         </html>
     )

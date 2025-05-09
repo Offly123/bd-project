@@ -1,0 +1,28 @@
+@use '@/colors' as *;
+
+.nav {
+
+    a {
+        $margin: clamp(1px, 1vw, 5px);
+        $padding: clamp(1px, 1vw, 5px);
+        color: transparent;
+        margin: $margin;
+        padding: $padding;
+        transition: all 0.1s;
+    }
+
+    a::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        z-index: -1;
+        transition: all 0.1s;
+    }
+
+    a:hover::before {
+        // background-color: $primary;
+    }
+}
