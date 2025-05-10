@@ -6,7 +6,6 @@ import localFont from 'next/font/local';
 import Header from '$/Header';
 import Footer from '$/Footer';
 
-import style from '@/layout.module.scss';
 import '@/global.scss';
 
 const manrope = localFont({

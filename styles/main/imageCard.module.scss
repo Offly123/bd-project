@@ -1,0 +1,54 @@
+@use '@/colors' as *;
+
+$padding: clamp(1px, 2vw, 10px);
+$margin: clamp(1px, 2vw, 10px);
+
+.imageCard {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    background-color: $primary;
+    margin: $margin;
+    // padding: $padding;
+    width: max(200px, calc(30% - 2 * $padding - 2 * $margin));
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+    
+    transition: all 0.1s;
+    scale: 1.00;
+    box-shadow: 0px 0px 5px #222;
+
+    .image {
+        aspect-ratio: 1920 / 1080;
+        height: calc(100% * 1080 / 1920);
+    }
+
+    .imageMeta {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-direction: column;
+        flex-grow: 1;
+        width: calc(100% - 2 * $padding);
+        padding: $padding;
+    }
+
+    .end {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: calc(100% - 2 * $padding);
+        padding: $padding;
+
+        img {
+            filter: invert(1);
+            color: black;
+        }
+    }
+}
+
+.imageCard:hover {
+    box-shadow: 0px 0px 10px #2a2a2a;
+    scale: 1.02;
+}

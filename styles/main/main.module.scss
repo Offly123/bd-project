@@ -1,0 +1,7 @@
+.imageList {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: min(80vw, 1200px);
+}
