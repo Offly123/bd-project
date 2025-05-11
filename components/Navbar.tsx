@@ -5,26 +5,26 @@ import style from '@/header/navbar.module.scss'
 export default function Navbar() {
     return (
         <nav className={style.nav}>
-            <a href="">
+            {/* <a href="">
                 <p>
                     На главную
                 </p>
-            </a>
-            <a href="">
+            </a> */}
+            <a href="/favorites/">
                 <p>
                     Избранное
                 </p>
             </a>
-            <a href="">
+            <a href="/login/">
                 <p>
-                    Войти
+                    Вход
                 </p>
             </a>
-            {/* <a href="">
+            <a href="/registration">
                 <p>
-                    Админка
+                    Регистрация
                 </p>
-            </a> */}
+            </a>
         </nav>
     )
 }

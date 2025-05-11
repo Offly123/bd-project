@@ -5,6 +5,7 @@ $padding: 20px;
 .header {
     display: flex;
     flex-wrap: wrap;
+    flex-shrink: 0;
     background-image: linear-gradient(90deg, $accent, $secondary);
     background-clip: text;
     color: transparent;

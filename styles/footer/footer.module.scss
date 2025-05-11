@@ -4,6 +4,7 @@ $padding: 20px;
 
 .footer {
     display: flex;
+    flex-shrink: 0;
     position: relative;
     justify-content: center;
     width: calc(100% - 2 * $padding);

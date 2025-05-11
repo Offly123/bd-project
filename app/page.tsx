@@ -1,14 +1,31 @@
 'use client'
 
-import React from "react"
+import React, { useEffect } from 'react'
 
-import ImageCard, { ImageInfo } from "$/ImageCard"
+import ImageCard, { ImageInfo } from '$/ImageCard'
 
 import style from '@/main/main.module.scss'
 
 
 
 export default function Main() {
+
+    useEffect(() => {
+        const foo = async () => {
+            const res = await fetch('/api/temp', {
+                method: 'POST'
+            });
+            if (res.ok) {
+                const fetchData = await res.json();
+                console.log(fetchData);
+            } else {
+                console.log('Something went wrong');
+            }
+        }
+
+        foo();
+    }, [])
+
     return (
         <div className={style.imageList}>
             {

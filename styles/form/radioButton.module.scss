@@ -1,0 +1,20 @@
+@use '@/colors' as *;
+
+.radio {
+    padding: 5px;
+    margin: 5px;
+    display: flex;
+    transition: all 0.1s;
+}
+
+.radio:hover {
+    background-color: $secondary-pale;
+}
+
+.radio:has(input:checked) {
+    background-color: $accent;
+}
+
+.radio:has(input:checked):nth-child(2) {
+    background-color: rgb(255, 100, 126);
+}

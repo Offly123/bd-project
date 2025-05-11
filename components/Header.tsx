@@ -10,7 +10,7 @@ export default function Header() {
     return (
         <header className={style.header}>
             <h1>
-                <a href="">
+                <a href="/">
                     Название сайта
                 </a>
             </h1>

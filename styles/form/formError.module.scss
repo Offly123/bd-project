@@ -1,0 +1,17 @@
+@use '@/colors' as *;
+
+.errors {
+    width: 80%;
+    color: red;
+    text-align: center;
+    
+    .errorText {
+        display: block;
+        font-weight: 500;
+        font-size: 13px;
+        text-align: left;
+        margin: 5px;
+        padding: 5px;
+        border-bottom: 1px solid red;
+    }
+}

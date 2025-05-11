@@ -1,0 +1,28 @@
+@use '@/colors' as *;
+
+$margin: 5px;
+$padding: 5px;
+
+.end {
+    display: flex;
+    flex-direction: row;
+    align-self: flex-end;
+    margin: $margin;
+    padding: $padding;
+    width: calc(100% - $margin * 2 - $padding * 2);
+    justify-content: flex-end;
+
+    button {
+        background-color: $background;
+        padding: 5px;
+        
+        transition: all 0.1s;
+        border: 2px solid $box-shadow;
+        color: $pale;
+    }
+
+    button:hover {
+        border: 2px solid #333;
+        color: $text;
+    }
+}
