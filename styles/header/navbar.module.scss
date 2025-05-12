@@ -5,14 +5,14 @@
     a {
         $margin: clamp(1px, 1vw, 5px);
         $padding: clamp(1px, 1vw, 5px);
-        color: transparent;
+        color: $text;
         margin: $margin;
         padding: $padding;
         transition: all 0.1s;
     }
 
     a:hover {
-        color: rgba(255, 255, 255, 0.25);
+        color: #fff;
     }
 
     // Я написал это вчера и уже не знаю, что это такое, но

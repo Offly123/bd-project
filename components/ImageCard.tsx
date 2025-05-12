@@ -17,20 +17,17 @@ export default function ImageCard({
     return (
         <article className={style.imageCard}>
             <img className={style.image} src={imageData.src} alt='image.png' />
-            <p className={style.imageMeta}>
-                {
-                    imageData.tags.map((tag, index) => (
-                        tag + ' '
-                    ))
-                }
-            </p>
             <div className={style.end}>
+                <p className={style.imageMeta}>
+                    {
+                        imageData.tags.map((tag, index) => (
+                            tag + ' '
+                        ))
+                    }
+                </p>
                 <p className={style.facorites}>
                     &#9733; { imageData.favoriteCount }
                 </p>
-                <button>
-                    <img height='20px' width='23px' src="/download-button.png" alt="скачать" />
-                </button>
             </div>
         </article>
     )

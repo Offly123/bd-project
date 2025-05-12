@@ -23,7 +23,7 @@ $padding: 20px;
     width: calc(100vw);
     height: 1px;
 
-    @media screen and (min-width: $min-width) {
+    @media screen and (min-width: $tablet) {
         height: 2px;
     }
 }

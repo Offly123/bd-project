@@ -39,11 +39,11 @@ export default function Main() {
 
 // Заполнитель, в идеале брать из БД
 const images: Array<ImageInfo> = [
-    {src: 'a', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
-    {src: 'a', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
-    {src: 'a', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
-    {src: 'a', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
-    {src: 'a', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
-    {src: 'a', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
-    {src: 'a', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337}
+    {src: '/images/mem17.jpg', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
+    {src: '/images/mem17.jpg', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
+    {src: '/images/mem17.jpg', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
+    {src: '/images/mem17.jpg', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
+    {src: '/images/mem17.jpg', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
+    {src: '/images/mem17.jpg', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337},
+    {src: '/images/mem17.jpg', tags: ['cool', 'picture', 'cinema', 'absolute'], resolution: '1920x1080', favoriteCount: 1337}
 ]
