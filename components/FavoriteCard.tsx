@@ -11,40 +11,40 @@ export interface ImageInfo {
     favoriteCount: number
 }
 
-export default function ImageCard({ 
+export default function FavoriteCard({ 
     imageData 
 }: {
     imageData: ImageInfo
 }) {
+    const [ isVisible, setIsVisible ] = useState(true);
 
-    const [ favoriteCount, setFavoriteCount ] = useState(imageData.favoriteCount);
-
-    const addFavorite = async () => {
-        const res = await fetch('/api/addFavorite/', {
+    const deleteFavorite = async () => {
+        const res = await fetch('/api/deleteFavorite/', {
             method: 'POST',
             body: JSON.stringify({image_id: imageData.image_id})
         })
         if (res.ok) {
-            const fetchData = await res.json();
-            if (!fetchData.error) {
-                setFavoriteCount(favoriteCount + 1);
-            }
+            setIsVisible(false);
         }
     }
 
+    if (!isVisible) {
+        return;
+    }
+    
     return (
         <article className={style.imageCard}>
             <img className={style.image} src={imageData.src} alt='image.png' />
             <div className={style.end}>
                 <p className={style.imageMeta}>
-                    {
-                        imageData.tags.map((tag, index) => (
-                            tag + ' '
-                        ))
-                    }
+                {
+                    imageData.tags.map((tag, index) => (
+                        tag + ' '
+                    ))
+                }
                 </p>
-                <button onClick={addFavorite} className={style.facorites}>
-                    &#9733; { favoriteCount }
+                <button onClick={deleteFavorite} className={style.favorites}>
+                    &#9733; { imageData.favoriteCount }
                 </button>
             </div>
         </article>

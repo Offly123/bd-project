@@ -36,11 +36,19 @@ $margin: clamp(1px, 2vw, 10px);
         justify-content: space-between;
         align-items: center;
         width: calc(100% - 2 * $padding);
+        height: calc(100% - 300% * 1080 / 1920);
         padding: $padding;
 
-        img {
-            filter: invert(1);
-            color: black;
+        button {
+            padding: 0 5px;
+            height: calc(100% + 2 * $padding);
+
+            transition: all 0.1s;
+            background-color: rgba(255, 255, 255, 0.0);
+        }
+
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.10);
         }
     }
 }

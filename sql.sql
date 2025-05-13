@@ -46,7 +46,7 @@ VALUES
 
 
 
--- users
+-- USERS
 
 -- Вставка нового пользователя
 INSERT INTO users
@@ -56,3 +56,51 @@ VALUES (?, ?);
 -- Получение пароля пользователя
 SELECT user_id, user_password FROM users
 WHERE user_login=?;
+
+
+
+-- CATEGORIES
+
+
+-- IMAGES
+
+-- Получить все картинки
+SELECT i.image_id, file_name as src, category_name, COUNT(DISTINCT fi.user_id) as favoriteCount, GROUP_CONCAT(DISTINCT tag) as tags from images i 
+LEFT JOIN favorite_images fi ON i.image_id=fi.image_id 
+JOIN categories c ON c.category_id=i.category_id 
+JOIN image_tags it ON i.image_id=it.image_id 
+GROUP BY i.image_id, file_name, category_name;
+
+-- Добавить картинку
+INSERT IGNORE INTO images
+    (file_name, category_id)
+VALUES ('/images/', 2);
+
+
+
+-- IMAGE_TAGS
+
+-- Добавить тег картинки
+INSERT IGNORE INTO image_tags
+    (image_id, tag)
+VALUES (?, ?);
+
+
+
+-- FAVORITE_IMAGES
+
+-- Добавить картинку в избранное
+INSERT IGNORE INTO favorite_images
+    (user_id, image_id)
+VALUES (?, ?);
+
+-- Удалить картинку из избранного
+DELETE FROM favorite_images
+WHERE user_id=? AND image_id=?;
+
+-- Получить список избранных картинок пользователя
+SELECT i.image_id, file_name as src, category_name, COUNT(DISTINCT fi.user_id) as favoriteCount, GROUP_CONCAT(DISTINCT tag) as tags from images i
+JOIN favorite_images fi ON i.image_id=fi.image_id AND fi.user_id=?
+JOIN categories c ON c.category_id=i.category_id 
+JOIN image_tags it ON i.image_id=it.image_id
+GROUP BY i.image_id, file_name, category_name
