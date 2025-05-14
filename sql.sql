@@ -74,7 +74,7 @@ GROUP BY i.image_id, file_name, category_name;
 -- Добавить картинку
 INSERT IGNORE INTO images
     (file_name, category_id)
-VALUES ('/images/', 2);
+VALUES ('/images/', ?);
 
 
 

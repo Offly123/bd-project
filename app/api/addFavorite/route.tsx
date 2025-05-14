@@ -25,7 +25,7 @@ export async function POST(req: Request): Promise<Response> {
         return new Response(JSON.stringify({error: true, message: 'Invalid jwt'}));
     }
 
-    const userId = decodedJwt.payload.clientId;
+    const userId = decodedJwt.payload.userId;
 
 
 
@@ -40,12 +40,14 @@ export async function POST(req: Request): Promise<Response> {
     `;
     let affectedRows;
     try {
+        
+        console.log('\n\n\n');
+        console.log(decodedJwt);
         affectedRows = await con.execute(sqlInsertFavorite, [userId, favoriteImageId]);
         affectedRows = affectedRows[0].affectedRows;
     } catch (err) {
         return await showDBError(con, err);
     }
-    
 
 
     await disconnectFromDB(con);

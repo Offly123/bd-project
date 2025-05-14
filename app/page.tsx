@@ -32,9 +32,11 @@ export default function Main() {
     return (
         <div className={style.imageList}>
             {
+                imageList && imageList.length ? 
                 imageList.map((image: ImageInfo, index) => (
                     <ImageCard key={index} imageData={image}/>
-                ))
+                )) :
+                <p>Empty</p>
             }
         </div>
     )

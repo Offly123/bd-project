@@ -25,7 +25,7 @@ export async function POST(req: Request): Promise<Response> {
         return new Response(JSON.stringify({error: true, message: 'Invalid jwt'}));
     }
 
-    const userId = decodedJwt.payload.clientId;
+    const userId = decodedJwt.payload.userId;
 
 
 
