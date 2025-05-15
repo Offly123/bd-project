@@ -7,7 +7,7 @@ $padding: 20px;
     flex-shrink: 0;
     position: relative;
     justify-content: center;
-    width: calc(100% - 2 * $padding);
+    width: calc(80% - 2 * $padding);
     padding: $padding;
 
     p {
@@ -18,9 +18,10 @@ $padding: 20px;
 .footer::before {
     content: '';
     position: absolute;
-    background-image: linear-gradient(90deg, black 5%, $pale 10%, $pale 90%, black 95%);
+    background-image: linear-gradient(90deg, transparent 5%, $pale 10%, $pale 90%, transparent 95%);
     top: 0px;
-    width: calc(100vw);
+    left: calc(0px - 10vw);
+    width: 100vw;
     height: 1px;
 
     @media screen and (min-width: $tablet) {

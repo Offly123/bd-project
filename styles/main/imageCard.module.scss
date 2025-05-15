@@ -8,20 +8,13 @@ $margin: clamp(1px, 2vw, 10px);
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    background-color: #252525;
+    background-color: #181818;
     margin: $margin;
     // padding: $padding;
     width: clamp(200px, calc(90vw - 2 * $padding - 2 * $margin), 425px);
-
-    // @media screen and (min-width: $tablet) {
-
-    // }
-
-    // @media screen and (min-width: $computer) {
-    //     width: max(200px, calc(30% - 2 * $padding - 2 * $margin));
-    // }
     aspect-ratio: 3 / 1;
     border-radius: 10px;
+    
     transition: all 0.1s;
     scale: 1.00;
 

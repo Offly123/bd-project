@@ -1,6 +1,9 @@
 @use '@/colors' as *;
 
 .nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 
     a {
         $margin: clamp(1px, 1vw, 5px);
