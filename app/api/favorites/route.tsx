@@ -48,8 +48,7 @@ export async function POST(req: Request): Promise<Response> {
         return await showDBError(con, err);
     }
 
-    console.log('\n\n\n');
-    console.log(userId);
+    
 
     await disconnectFromDB(con);
 
