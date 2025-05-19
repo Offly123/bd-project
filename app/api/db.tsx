@@ -28,8 +28,8 @@ export async function connectToDB(): Promise<any> {
 }
 
 export async function disconnectFromDB(connection: any) {
-    connection.commit();
-    connection.end();
+    await connection.commit();
+    await connection.end();
 }
 
 export async function showDBError(connection: any, err: any): Promise<Response> {

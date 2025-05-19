@@ -9,12 +9,7 @@ import { createJWT } from '../jwt';
 
 interface RegistrationData {
     user_login: string,
-    user_password: string,
-    first_name: string,
-    last_name: string,
-    phone_number: string,
-    email: string,
-    gender: string
+    user_password: string
 }
 
 export async function POST(req: Request): Promise<Response> {
@@ -72,7 +67,10 @@ export async function POST(req: Request): Promise<Response> {
     const userId = DBResponse[0].insertId;
     const jwtLifeTime = 60 * 60 * 24 * 14; // 2 недели
     const jwtSecret: any = process.env.JWT_KEY;
-    const JWT = createJWT({userId: userId}, jwtSecret, jwtLifeTime);
+    const JWT = createJWT({
+        userId: userId, 
+        role: registrationData.user_login === 'admin' ? 'admin' : 'user'
+    }, jwtSecret, jwtLifeTime);
     cookieStore.set('session', JWT, {httpOnly: true, maxAge: jwtLifeTime, path: '/'});
 
     return new Response(JSON.stringify({}));
@@ -92,7 +90,7 @@ const getErrorList = async (registrationData: RegistrationData): Promise<FormDat
         };
     }
 
-    if (registrationData.user_password.length < 8) {
+    if (registrationData.user_password.length < 1) {
         errorList = {
             ...errorList, user_password: {
                 error: true, 

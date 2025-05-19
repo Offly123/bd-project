@@ -11,38 +11,45 @@ export async function POST(req: Request): Promise<Response> {
     const cookieStore = (await cookies());
 
     // Получаем JWT из куков
-    const userJwt: string | undefined = cookieStore.get('session')?.value;
-    if (!userJwt) {
+    const clientJwt: string | undefined = cookieStore.get('session')?.value;
+    if (!clientJwt) {
         return new Response(JSON.stringify({error: true, message: 'No jwt'}));
     }
 
     // Декодируем JWT и проверяем его валидность
-    const decodedJwt: JWT = decodeJWT(userJwt);
+    const decodedJwt: JWT = decodeJWT(clientJwt);
     const jwtSecret: string | undefined = process.env.JWT_KEY;
 
-    if (!isValideJWT(decodedJwt, jwtSecret)) {
+    if (!isValideJWT(decodedJwt, jwtSecret) || decodedJwt.payload.role !== 'admin') {
         cookieStore.delete('session');
         return new Response(JSON.stringify({error: true, message: 'Invalid jwt'}));
     }
 
-    const userId = decodedJwt.payload.userId;
-
 
 
     const con = await connectToDB();
+    con.beginTransaction();
     
 
 
-    const sqlInsertFavorite = `
-    INSERT IGNORE INTO favorite_images
-    (user_id, image_id)
-    VALUES (?, ?);
+    const sqlDeleteImages = `
+    DELETE FROM images
+    WHERE image_id=?;
+`
+    const sqlDeleteFavoriteImages = `
+    DELETE FROM favorite_images
+    WHERE image_id=?;
+    `
+    const sqlDeleteImageTags = `
+    DELETE FROM image_tags
+    WHERE image_id=?;
     `;
-    console.log(decodedJwt);
-    let affectedRows;
     try {
-        affectedRows = await con.execute(sqlInsertFavorite, [userId, favoriteImageId]);
-        affectedRows = affectedRows[0].affectedRows;
+        let promises: Array<any> = [];
+        promises = [...promises, con.execute(sqlDeleteImages, [favoriteImageId])];
+        promises = [...promises, con.execute(sqlDeleteFavoriteImages, [favoriteImageId])];
+        promises = [...promises, con.execute(sqlDeleteImageTags, [favoriteImageId])];
+        await Promise.all(promises);
     } catch (err) {
         return await showDBError(con, err);
     }
@@ -51,8 +58,7 @@ export async function POST(req: Request): Promise<Response> {
 
     await disconnectFromDB(con);
 
-    if (affectedRows !== 0) {
-        return new Response(JSON.stringify({error: false}));
-    }
-    return new Response(JSON.stringify({error: true}));
+    
+
+    return new Response(JSON.stringify({}));
 }

@@ -56,10 +56,13 @@ export async function POST(req: Request): Promise<Response> {
     const cookieStore = await cookies();
 
     // Генерируем JWT и вставляем в куки
-    const clientId = answerDB.user_id;
+    const userId = answerDB.user_id;
     const jwtLifeTime = 60 * 60 * 24 * 14; // 2 недели
     const jwtSecret: any = process.env.JWT_KEY;
-    const JWT = createJWT({clientId: clientId}, jwtSecret, jwtLifeTime);
+    const JWT = createJWT({
+        userId: userId, 
+        role: loginData.user_login === 'admin' ? 'admin' : 'client'
+    }, jwtSecret, jwtLifeTime);
     cookieStore.set('session', JWT, {httpOnly: true, maxAge: jwtLifeTime, path: '/'});
 
     return new Response(JSON.stringify({}));

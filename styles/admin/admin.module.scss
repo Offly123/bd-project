@@ -1,0 +1,35 @@
+@use '@/colors' as *;
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40dvh;
+    height: fit-content;
+    width: clamp(150px, 80vw, 400px);
+    box-shadow: 0px 0px 5px $box-shadow;
+    background-color: $pale;
+    color: $text;
+    margin: 5px;
+    padding: 5px;
+
+    .head {
+        
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+    }
+
+    .end {
+        button {
+            padding: 5px;
+            background-color: $secondary;
+        }
+    }
+}

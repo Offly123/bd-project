@@ -31,6 +31,17 @@ CREATE TABLE favorite_images (
     FOREIGN KEY (image_id) REFERENCES images(image_id) ON DELETE CASCADE
 );
 
+-- Очистить все таблицы
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE users;
+TRUNCATE images;
+TRUNCATE image_tags;
+TRUNCATE favorite_images;
+TRUNCATE categories;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- Вставка категорий
 INSERT INTO categories 
     (category_name) 
@@ -53,13 +64,31 @@ INSERT INTO users
     (user_login, user_password)
 VALUES (?, ?);
 
+INSERT INTO users
+    (user_login, user_password)
+VALUES ('admin', 'admin');
+
 -- Получение пароля пользователя
 SELECT user_id, user_password FROM users
 WHERE user_login=?;
 
+-- Удалить картинку вообще совсем
+DELETE FROM images
+WHERE image_id=?;
+
+DELETE FROM favorite_images
+WHERE image_id=?;
+
+DELETE FROM image_tags
+WHERE image_id=?;
+
 
 
 -- CATEGORIES
+
+-- Получить все категории
+SELECT category_name FROM categories;
+
 
 
 -- IMAGES
@@ -74,7 +103,21 @@ GROUP BY i.image_id, file_name, category_name;
 -- Добавить картинку
 INSERT IGNORE INTO images
     (file_name, category_id)
-VALUES ('/images/', ?);
+VALUES (?, ?);
+
+INSERT IGNORE INTO favorite_images
+    (image_id, user_id)
+VALUES (?, ?);
+
+INSERT IGNORE INTO image_tags
+    (image_id, tag)
+VALUES (?, ?);
+
+-- Получить автоинкремент
+SELECT AUTO_INCREMENT 
+FROM  INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_SCHEMA = 'project' 
+AND   TABLE_NAME   = 'images';
 
 
 
