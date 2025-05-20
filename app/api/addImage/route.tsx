@@ -28,8 +28,12 @@ export async function POST(req: Request): Promise<Response> {
     
     // Получаем текущий автоинкремент (АБСОЛЮТНО ненормальный способ)
     let currentIncrement;
+    // currentIncrement = (await con.execute('SHOW CREATE TABLE images;'))[0][0]['Create Table']?.split('AUTO_INCREMENT=')[1];
     currentIncrement = (await con.execute('SHOW CREATE TABLE images;'))[0][0]['Create Table'].split('AUTO_INCREMENT=')[1];
-    currentIncrement = currentIncrement ? currentIncrement[0][0]['Create Table'].split('AUTO_INCREMENT=')[1].split(' ')[0] : 1;
+    // currentIncrement = (await con.execute('SHOW CREATE TABLE images;'))[0][0]['Create Table'];
+    // console.log(currentIncrement);
+    currentIncrement = currentIncrement ? currentIncrement.split(' ')[0] : 1;
+    // console.log("\n\nINECREMENT:" + currentIncrement);
 
     // Нормальный способ, но он не работает
     // let currentIncrement;
@@ -51,8 +55,8 @@ export async function POST(req: Request): Promise<Response> {
     }
 
 
-    console.log(formData);
     // Вставляем картинку в БД
+    // console.log(formData);
     const sqlInsertImages = `
     INSERT IGNORE INTO images
     (file_name, category_id)
