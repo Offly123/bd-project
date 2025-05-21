@@ -32,6 +32,12 @@ $margin: clamp(1px, 2vw, 10px);
         height: calc(100% - 300% * 1080 / 1920);
         padding: $padding;
 
+        p {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 80%;
+        }
+
         button {
             padding: 0 5px;
             height: calc(100% + 2 * $padding);

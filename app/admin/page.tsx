@@ -68,30 +68,34 @@ export default function Main() {
 
     return (
         <>
-            <form className={style.form} action='/api/addImage' method='POST'>
+            {
+                categoryList && categoryList.length ?
+                <form className={style.form} action='/api/addImage' method='POST'>
                 <div className={style.head}>
                     <h2>
                         Загрузить картинку
                     </h2>
                 </div>
                 <div className={style.main}>
-                    <div>
+                    <div className={style.input}>
                         <label htmlFor="category">Категория</label>
                         {
                             // До ста категорий, в идеале убрать костыль с умножением
+                            categoryList && categoryList.length ?
                             categoryList.map((category, index) => (
-                                <div key={index}>
+                                <div key={index} className={style.radioInput}>
                                     <input type="radio" name="category" id={category.category_id} value={category.category_id} />
-                                    <label htmlFor={`#${category.category_id}`}>{category.category_name}</label>
+                                    <label htmlFor={`${category.category_id}`}>{category.category_name}</label>
                                 </div>
-                            ))
+                            )) :
+                            <p>Yo</p>
                         }
                     </div>
-                    <div>
+                    <div className={style.input}>
                         <label htmlFor="tags">Теги</label>
                         <input name="tags" type="text" />
                     </div>
-                    <div>
+                    <div className={style.input}>
                         <label htmlFor="imageInput">
                             Выбрать файл
                         </label>
@@ -103,7 +107,9 @@ export default function Main() {
                         Отправить
                     </button>
                 </div>
-            </form>
+            </form> :
+            <p>Ошибка при получении категорий</p>
+            }
             <div className={style.imageList}>
                 {
                     imageList && imageList.length ? 
@@ -111,7 +117,7 @@ export default function Main() {
                         // Тот самый костыль
                         <AdminImageCard key={index * 100 + 1} imageData={image}/>
                     )) :
-                    <p>Картинок нет :(</p>
+                    <p>Ошибка при получении картинок</p>
                 }
             </div>
         </>

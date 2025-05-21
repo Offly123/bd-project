@@ -4,7 +4,7 @@ CREATE TABLE users (
     user_password   VARCHAR(100) NOT NULL
 );
 
--- У каждой картинки одна категория
+-- У каждой картинки тоьлько одна категория
 CREATE TABLE categories (
     category_id     INT AUTO_INCREMENT PRIMARY KEY,
     category_name   VARCHAR(50) NOT NULL UNIQUE
@@ -31,7 +31,7 @@ CREATE TABLE favorite_images (
     FOREIGN KEY (image_id) REFERENCES images(image_id) ON DELETE CASCADE
 );
 
--- Очистить все таблицы
+-- Очищение таблиц
 SET FOREIGN_KEY_CHECKS = 0;
 
 TRUNCATE users;
@@ -64,23 +64,9 @@ INSERT INTO users
     (user_login, user_password)
 VALUES (?, ?);
 
-INSERT INTO users
-    (user_login, user_password)
-VALUES ('admin', 'admin');
-
 -- Получение пароля пользователя
 SELECT user_id, user_password FROM users
 WHERE user_login=?;
-
--- Удалить картинку вообще совсем
-DELETE FROM images
-WHERE image_id=?;
-
-DELETE FROM favorite_images
-WHERE image_id=?;
-
-DELETE FROM image_tags
-WHERE image_id=?;
 
 
 
@@ -113,11 +99,21 @@ INSERT IGNORE INTO image_tags
     (image_id, tag)
 VALUES (?, ?);
 
--- Получить автоинкремент
+-- Получить автоинкремент (почему-то не работает) (уже работает)
 SELECT AUTO_INCREMENT 
 FROM  INFORMATION_SCHEMA.TABLES 
 WHERE TABLE_SCHEMA = 'project' 
 AND   TABLE_NAME   = 'images';
+
+-- Удалить картинку (из картинок, избранных и тегов)
+DELETE FROM images
+WHERE image_id=?;
+
+DELETE FROM favorite_images
+WHERE image_id=?;
+
+DELETE FROM image_tags
+WHERE image_id=?;
 
 
 

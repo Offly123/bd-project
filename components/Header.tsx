@@ -11,7 +11,7 @@ export default function Header() {
         <header className={style.header}>
             <h1>
                 <a href="/">
-                    Название сайта
+                    ඞ
                 </a>
             </h1>
             <Navbar />
