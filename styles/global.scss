@@ -42,10 +42,12 @@ p {
     font-size: min(4.5vw, 18px);
 }
 
-a {
+button {
+    font-size: min(4.5vw, 18px);
     cursor: pointer;
+    user-select: none;
 }
 
-button {
+a {
     cursor: pointer;
 }

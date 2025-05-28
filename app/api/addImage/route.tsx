@@ -40,6 +40,7 @@ export async function POST(req: Request): Promise<Response> {
     
     const buffer = Buffer.from(await file.arrayBuffer());
     const filename = file.name;
+    const fileExtension = '.' + filename.split('.')[filename.split('.').length - 1];
     
     
     
@@ -56,6 +57,7 @@ export async function POST(req: Request): Promise<Response> {
     currentIncrement = currentIncrement ? currentIncrement.split(' ')[0] : 1;
     // console.log("\n\nINECREMENT:" + currentIncrement);
 
+    
     // Нормальный способ, но он не работает
     // let currentIncrement;
     // try {
@@ -69,7 +71,7 @@ export async function POST(req: Request): Promise<Response> {
 
     // Загружаем картинку на сервер
     try {
-        await writeFile(path.join('/home/public/images/', currentIncrement + filename), buffer);
+        await writeFile(path.join('/home/public/images/', currentIncrement + fileExtension), buffer);
     } catch (err) {
         console.log(err);
         return new Response(JSON.stringify({}));
@@ -80,8 +82,8 @@ export async function POST(req: Request): Promise<Response> {
     // console.log(formData);
     const sqlInsertImages = `
     INSERT IGNORE INTO images
-    (file_name, category_id)
-    VALUES (?, ?);
+    (file_name, category_id, upload_time)
+    VALUES (?, ?, ?);
     `;
     const category_id = formData.get('category_id');
     const tags = formData.get('tags').split(' ');
@@ -92,11 +94,18 @@ export async function POST(req: Request): Promise<Response> {
     `;
     try {
         let promises: Array<any> = [];
-        promises = [...promises, con.execute(sqlInsertImages, [path.join('/images/', currentIncrement + filename), category_id])];
+
+        promises = [...promises, con.execute(sqlInsertImages, [
+            path.join('/images/', currentIncrement + fileExtension), 
+            category_id,
+            new Date()
+        ])];
+
         promises = [...promises, tags.map((tag) => {
             return con.execute(sqlInsertImageTags, [currentIncrement, tag]);
         })];
-        Promise.all(promises);
+
+        await Promise.all(promises);
     } catch (err) {
         return await showDBError(con, err);
     }

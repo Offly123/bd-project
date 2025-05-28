@@ -3,15 +3,18 @@
 import React, { useEffect, useState } from 'react'
 
 import ImageCard, { ImageInfo } from '$/ImageCard'
+import Filter, { FilterRules } from '$/Filter'
+
 
 import style from '@/main/main.module.scss'
 
 
 
 export default function Main() {
-
-    const [ imageList, setImageList ] = useState< Array<ImageInfo> >([]);
-
+    
+    const [ shownImages, setShownImages ] = useState< Array<ImageInfo> >([]);
+    const [ imageList, setImageList] = useState<Array<ImageInfo>>([]);
+    
     // Взятие картинок из БД
     useEffect(() => {
         const foo = async () => {
@@ -19,25 +22,75 @@ export default function Main() {
                 method: 'POST'
             });
             if (res.ok) {
-                const fetchData = await res.json();
+                let fetchData = await res.json();
+                
+                // По стандарту сортируем по дате добавления (от новых к старым)
+                fetchData.sort((a, b) => {
+                    return b.uploadTime - a.uploadTime;
+                });
+                
+                console.log(fetchData);
                 setImageList(fetchData);
+                setShownImages(fetchData);
             } else {
                 console.log('Something went wrong');
             }
         }
-
         foo();
     }, []);
+    
+    
+    
+    const [ filterRuleList, setFilterRuleList ] = useState<FilterRules>({
+        timeFrom: undefined,
+        timeTo: undefined,
+        timeOrder: undefined,
+        tags: [],
+        favoriteOrder: undefined
+    });
+    
+
+    // Фильтрация картинок
+    useEffect(() => {
+        let newShownImages = [...imageList];
+        // console.log(filterRuleList);
+        
+        // Фильтрация по времени ОТ и ДО
+        if (filterRuleList.timeFrom) {
+            newShownImages = newShownImages.filter((image: ImageInfo) => {
+                return image.uploadTime > filterRuleList.timeFrom
+            });
+        }
+        
+        if (filterRuleList.timeTo) {
+            newShownImages = newShownImages.filter((image: ImageInfo) => {
+                console.log(image.uploadTime);
+                return image.uploadTime < filterRuleList.timeTo
+            });
+        }
+        
+        // Сортировка по избранным
+        if (filterRuleList.favoriteOrder) {
+            newShownImages.sort((a, b) => {
+                return b.favoriteCount - a.favoriteCount;
+            })
+        }
+        
+        setShownImages(newShownImages);
+    }, [filterRuleList]);
 
     return (
-        <div className={style.imageList}>
-            {
-                imageList && imageList.length ? 
-                imageList.map((image: ImageInfo, index) => (
-                    <ImageCard key={index} imageData={image}/>
-                )) :
-                <p>Empty</p>
-            }
-        </div>
+        <>
+            <Filter setFilterRuleList={setFilterRuleList}/>
+            <div className={style.imageList}>
+                {
+                    shownImages && shownImages.length 
+                        ? shownImages.map((image: ImageInfo, index) => (
+                        <ImageCard key={image.image_id} imageData={image} setShownImages={setShownImages} />
+                        )) 
+                        : <p>Пусто</p>
+                }
+            </div>
+        </>
     )
 }

@@ -14,6 +14,7 @@ CREATE TABLE images (
     image_id    INT AUTO_INCREMENT PRIMARY KEY,
     file_name   VARCHAR(255) NOT NULL,
     category_id INT NOT NULL,
+    upload_time DATETIME,
     FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE RESTRICT
 );
 
