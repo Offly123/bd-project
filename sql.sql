@@ -116,6 +116,64 @@ WHERE image_id=?;
 DELETE FROM image_tags
 WHERE image_id=?;
 
+-- Получить список картинок не старше недели, у которых есть теги, 
+-- которые есть у картинок, добавленных пользователем, 
+-- и отсортировать по количеству избранных
+SELECT
+    i.image_id,
+    i.file_name as src,
+    category_name,
+    COUNT(DISTINCT fi.user_id) as favoriteCount,
+    GROUP_CONCAT(DISTINCT it4.tag) as tags
+FROM
+    images i
+LEFT JOIN 
+    favorite_images fi ON i.image_id = fi.image_id
+LEFT JOIN 
+    image_tags it4 ON i.image_id = it4.image_id
+LEFT JOIN 
+    categories c ON i.category_id = c.category_id
+WHERE
+    i.upload_time >= NOW() - INTERVAL 7 DAY
+    AND i.image_id IN (
+    SELECT 
+        i2.image_id
+    FROM 
+        images i2
+    LEFT JOIN 
+        favorite_images f ON i2.image_id = f.image_id
+    LEFT JOIN 
+        image_tags it ON i2.image_id = it.image_id
+    WHERE 
+        i2.image_id IN (
+            SELECT DISTINCT it2.image_id
+            FROM image_tags it2
+            WHERE it2.tag IN (
+                SELECT DISTINCT it3.tag
+                FROM images img
+                JOIN image_tags it3 ON img.image_id = it3.image_id
+                WHERE img.image_id IN (
+                    SELECT image_id 
+                    FROM favorite_images 
+                    WHERE user_id = 2
+                )
+            )
+        )
+    ) 
+    AND i.image_id NOT IN (
+        SELECT
+            fi2.image_id
+        FROM 
+            favorite_images fi2
+        WHERE
+            fi2.user_id = 2
+    )
+GROUP BY
+    i.image_id, file_name, category_name
+ORDER BY
+    favoriteCount DESC
+LIMIT 50;
+
 
 
 -- IMAGE_TAGS

@@ -1,7 +1,29 @@
+@use '@/colors' as *;
+
+$margin: 34px;
+
 .imageList {
     display: flex;
+    position: relative;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     width: min(90vw, 2000px);
+    margin: $margin 0px;
+}
+
+.recommendationsList::before {
+    content: '';
+    position: absolute;
+    background-image: linear-gradient(90deg, transparent 5%, $pale 10%, $pale 90%, transparent 95%);
+    width: 100%;
+    
+    $height: 2px;
+    height: $height;
+    bottom: calc(0px - $margin - $height / 2);
+    @media screen and (min-width: $tablet) {
+        $height: 4px;
+        height: $height;
+        bottom: calc(0px - $margin - $height / 2);
+    }
 }

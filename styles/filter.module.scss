@@ -6,11 +6,41 @@
     align-items: center;
     flex-direction: column;
 
-    .button {
+    button {
         color: $text;
+        margin: 5px;
+        padding: 5px;
+        background-color: $primary;
+        border-radius: 10px;
     }
 
+    button:hover {
+        background-color: $box-shadow;
+    }
+
+    button:active {
+        background-color: $onclick;
+    }
+    
+    div {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 5px;
+        
+        label {
+            padding: 5px;
+        }
+    }
+    
+    .timeInterval, .timeOrder {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
     .p {
         color: $pale;
     }
+    
 }

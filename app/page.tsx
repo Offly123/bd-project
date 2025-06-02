@@ -15,9 +15,10 @@ export default function Main() {
     const [ shownImages, setShownImages ] = useState< Array<ImageInfo> >([]);
     const [ imageList, setImageList] = useState<Array<ImageInfo>>([]);
     
-    // Взятие картинок из БД
+    
+    // Взятие всех картинок из БД
     useEffect(() => {
-        const foo = async () => {
+        const getImageList = async () => {
             const res = await fetch('/api/main', {
                 method: 'POST'
             });
@@ -25,18 +26,44 @@ export default function Main() {
                 let fetchData = await res.json();
                 
                 // По стандарту сортируем по дате добавления (от новых к старым)
-                fetchData.sort((a, b) => {
+                if (fetchData.length)
+                fetchData.sort((a: ImageInfo, b: ImageInfo) => {
                     return b.uploadTime - a.uploadTime;
                 });
                 
-                console.log(fetchData);
+                // console.log(fetchData);
                 setImageList(fetchData);
                 setShownImages(fetchData);
             } else {
                 console.log('Something went wrong');
             }
         }
-        foo();
+        getImageList();
+    }, []);
+
+    const [ recommendationsList, setRecommendationsList] = useState<Array<ImageInfo>>([]);
+
+    useEffect(() => {
+        const getResommendationsList = async () => {
+            const res = await fetch('/api/recommendations', {
+                method: 'POST'
+            });
+            if (res.ok) {
+                let fetchData = await res.json();
+                
+                // По стандарту сортируем по дате добавления (от новых к старым)
+                if (fetchData.length) {
+                    fetchData.sort((a: ImageInfo, b: ImageInfo) => {
+                        return b.uploadTime - a.uploadTime;
+                    });
+                }
+                
+                setRecommendationsList(fetchData);
+            } else {
+                console.log('Something went wrong');
+            }
+        }
+        getResommendationsList();
     }, []);
     
     
@@ -49,11 +76,11 @@ export default function Main() {
         favoriteOrder: undefined
     });
     
+    
 
     // Фильтрация картинок
     useEffect(() => {
         let newShownImages = [...imageList];
-        // console.log(filterRuleList);
         
         // Фильтрация по времени ОТ и ДО
         if (filterRuleList.timeFrom) {
@@ -64,9 +91,24 @@ export default function Main() {
         
         if (filterRuleList.timeTo) {
             newShownImages = newShownImages.filter((image: ImageInfo) => {
-                console.log(image.uploadTime);
                 return image.uploadTime < filterRuleList.timeTo
             });
+        }
+
+        // Сортировка по времени добавления
+        if (filterRuleList.timeOrder) {
+
+            if (filterRuleList.timeOrder === 'up') {
+                newShownImages.sort((a, b) => {
+                    return b.uploadTime - a.uploadTime
+                });
+            }
+
+            if (filterRuleList.timeOrder === 'down') {
+                newShownImages.sort((a, b) => {
+                    return a.uploadTime - b.uploadTime
+                });
+            }
         }
         
         // Сортировка по избранным
@@ -75,6 +117,18 @@ export default function Main() {
                 return b.favoriteCount - a.favoriteCount;
             })
         }
+
+        // Фильтрация по тегам (хотя бы один тег картинки содержит подтрокой теги фильтра)
+        if (filterRuleList.tags.length) {
+            newShownImages = newShownImages.filter(image => {
+                return image.tags.some(imageTag => {
+                    return filterRuleList.tags.some(filterTag => {
+                        return imageTag.includes(filterTag);
+                    });
+                });
+            })
+        }
+
         
         setShownImages(newShownImages);
     }, [filterRuleList]);
@@ -82,6 +136,19 @@ export default function Main() {
     return (
         <>
             <Filter setFilterRuleList={setFilterRuleList}/>
+            {
+                recommendationsList && recommendationsList.length
+                    ? <>
+                    <h2>Список рекомендаций:</h2>
+                    <div className={style.recommendationsList + ' ' + style.imageList}> 
+                    {
+                        recommendationsList.map((image: ImageInfo, index) => (
+                            <ImageCard key={image.image_id} imageData={image} setShownImages={setShownImages} />
+                        )) }
+                        </div>
+                    </>
+                    : ''
+            }
             <div className={style.imageList}>
                 {
                     shownImages && shownImages.length 

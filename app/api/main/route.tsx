@@ -33,7 +33,7 @@ export async function POST(req: Request): Promise<Response> {
 
     imageList.forEach((image) => {
         image.uploadTime = new Date(image.uploadTime).getTime();
-        image.tags = image.tags.split(', ');
+        image.tags = image.tags.split(',');
     });
 
 

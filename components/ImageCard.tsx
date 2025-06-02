@@ -53,7 +53,7 @@ export default function ImageCard({
                 <p className={style.imageMeta}>
                     {
                         imageData.tags.map((tag, index) => {
-                            return tag + ' '
+                            return tag + ' ';
                         })
                     }
                 </p>
