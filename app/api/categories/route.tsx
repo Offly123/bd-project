@@ -41,8 +41,6 @@ export async function POST(req: Request): Promise<Response> {
     } catch (err) {
         return await showDBError(con, err);
     }
-    
-    console.log(categoriesJsons);
 
 
 

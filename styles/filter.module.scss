@@ -50,6 +50,10 @@
         border: none;
         border-radius: 10px;
     }
+
+    input:hover {
+        background-color: $box-shadow;
+    }
     
     .p {
         color: $pale;

@@ -51,11 +51,11 @@ export default function ImageCard({
             <img className={style.image} src={imageData.src} alt='image.png' />
             <div className={style.end}>
                 <p className={style.imageMeta}>
-                    {
-                        imageData.tags.map((tag, index) => {
-                            return tag + ' ';
-                        })
-                    }
+                {
+                    imageData.tags.map((tag, index) => {
+                        return tag + ' ';
+                    })
+                }
                 </p>
                 <button onClick={addFavorite} className={style.facorites}>
                     &#9733; { favoriteCount }

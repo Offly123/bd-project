@@ -38,7 +38,6 @@ export async function POST(req: Request): Promise<Response> {
     (user_id, image_id)
     VALUES (?, ?);
     `;
-    console.log(decodedJwt);
     let affectedRows;
     try {
         affectedRows = await con.execute(sqlInsertFavorite, [userId, favoriteImageId]);

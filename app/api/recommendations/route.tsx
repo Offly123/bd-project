@@ -97,9 +97,9 @@ LIMIT 50;
     } catch (err) {
         return await showDBError(con, err);
     }
-    console.log(imageList);
 
 
+    
     await disconnectFromDB(con);
 
 

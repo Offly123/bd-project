@@ -14,7 +14,6 @@ export async function POST(req: Request): Promise<Response> {
 
     // Получаем JWT из куков
     const adminJwt: string | undefined = cookieStore.get('session')?.value;
-    console.log(adminJwt);
     if (!adminJwt) {
         return new Response(JSON.stringify({error: true, message: 'No jwt'}));
     }

@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react';
+
 import Navbar from '$/Navbar';
 
 import style from '@/header/header.module.scss';
