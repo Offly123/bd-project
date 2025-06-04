@@ -53,7 +53,7 @@ export async function POST(req: Request): Promise<Response> {
 
 
     imageList.forEach((image) => {
-        image.tags = image.tags.split(', ');
+        image.tags = image.tags.split(',');
     });
 
     return new Response(JSON.stringify(imageList));

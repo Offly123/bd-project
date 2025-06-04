@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { SetStateAction, useEffect, useState } from 'react'
 
 import ImageCard, { ImageInfo } from '$/ImageCard'
 import Filter, { FilterRules } from '$/Filter'
@@ -80,56 +80,8 @@ export default function Main() {
 
     // Фильтрация картинок
     useEffect(() => {
-        let newShownImages = [...imageList];
-        
-        // Фильтрация по времени ОТ и ДО
-        if (filterRuleList.timeFrom) {
-            newShownImages = newShownImages.filter((image: ImageInfo) => {
-                return image.uploadTime > filterRuleList.timeFrom
-            });
-        }
-        
-        if (filterRuleList.timeTo) {
-            newShownImages = newShownImages.filter((image: ImageInfo) => {
-                return image.uploadTime < filterRuleList.timeTo
-            });
-        }
+        const newShownImages = getNewShownImages(imageList, filterRuleList)
 
-        // Сортировка по времени добавления
-        if (filterRuleList.timeOrder) {
-
-            if (filterRuleList.timeOrder === 'up') {
-                newShownImages.sort((a, b) => {
-                    return b.uploadTime - a.uploadTime
-                });
-            }
-
-            if (filterRuleList.timeOrder === 'down') {
-                newShownImages.sort((a, b) => {
-                    return a.uploadTime - b.uploadTime
-                });
-            }
-        }
-        
-        // Сортировка по избранным
-        if (filterRuleList.favoriteOrder) {
-            newShownImages.sort((a, b) => {
-                return b.favoriteCount - a.favoriteCount;
-            })
-        }
-
-        // Фильтрация по тегам (хотя бы один тег картинки содержит подтрокой теги фильтра)
-        if (filterRuleList.tags.length) {
-            newShownImages = newShownImages.filter(image => {
-                return image.tags.some(imageTag => {
-                    return filterRuleList.tags.some(filterTag => {
-                        return imageTag.includes(filterTag);
-                    });
-                });
-            })
-        }
-
-        
         setShownImages(newShownImages);
     }, [filterRuleList]);
 
@@ -139,17 +91,20 @@ export default function Main() {
             {
                 recommendationsList && recommendationsList.length
                     ? <>
-                    <h2>Список рекомендаций:</h2>
-                    <div className={style.recommendationsList + ' ' + style.imageList}> 
+                    <section className={style.recommendationsList}> 
+                        <h2>Список рекомендаций:</h2>
+                        <div className={style.imageList}>
                     {
                         recommendationsList.map((image: ImageInfo, index) => (
                             <ImageCard key={image.image_id} imageData={image} setShownImages={setShownImages} />
-                        )) }
-                        </div>
+                        )) 
+                    }
+                    </div>
+                    </section>
                     </>
                     : ''
             }
-            <div className={style.imageList}>
+            <section className={style.imageList}>
                 {
                     shownImages && shownImages.length 
                         ? shownImages.map((image: ImageInfo, index) => (
@@ -157,7 +112,67 @@ export default function Main() {
                         )) 
                         : <p>Пусто</p>
                 }
-            </div>
+            </section>
         </>
     )
+}
+
+
+
+export const getNewShownImages = (
+    imageList: Array<ImageInfo>,
+    filterRuleList: FilterRules,
+): Array<ImageInfo> => {
+    let newShownImages = [...imageList];
+        
+    // Фильтрация по времени ОТ и ДО
+    if (filterRuleList.timeFrom) {
+        newShownImages = newShownImages.filter((image: ImageInfo) => {
+            return image.uploadTime > filterRuleList.timeFrom
+        });
+    }
+    
+    if (filterRuleList.timeTo) {
+        newShownImages = newShownImages.filter((image: ImageInfo) => {
+            return image.uploadTime < filterRuleList.timeTo
+        });
+    }
+
+    // Сортировка по времени добавления
+    if (filterRuleList.timeOrder) {
+
+        if (filterRuleList.timeOrder === 'up') {
+            newShownImages.sort((a, b) => {
+                return b.uploadTime - a.uploadTime
+            });
+        }
+
+        if (filterRuleList.timeOrder === 'down') {
+            newShownImages.sort((a, b) => {
+                return a.uploadTime - b.uploadTime
+            });
+        }
+    }
+    
+    // Сортировка по избранным
+    if (filterRuleList.favoriteOrder) {
+        newShownImages.sort((a, b) => {
+            return b.favoriteCount - a.favoriteCount;
+        })
+    }
+
+    // Фильтрация по тегам (картинка должна содержать все теги из фильтра)
+    if (filterRuleList.tags.length) {
+        newShownImages = newShownImages.filter(image => {
+            let tagsMissing = false;
+            filterRuleList.tags.forEach(filterTag => {
+                if (!image.tags.includes(filterTag) ) {
+                    tagsMissing = true;
+                }
+            });
+            return !tagsMissing;
+        });
+    }
+
+    return newShownImages;
 }

@@ -42,10 +42,16 @@ p {
     font-size: min(4.5vw, 18px);
 }
 
-button {
+button, input {
     font-size: min(4.5vw, 18px);
+    background-color: $primary;
+    color: $text;
     cursor: pointer;
     user-select: none;
+}
+
+input[type="text"] {
+    cursor: text;
 }
 
 a {

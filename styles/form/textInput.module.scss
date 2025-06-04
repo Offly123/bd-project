@@ -13,16 +13,19 @@
 
     input {
         all: unset;
-        box-shadow: none;
-        border: 2px solid $box-shadow;
         width: clamp(10px, 80%, 300px);
         padding: 5px;
+        margin: 5px;
         background-color: $background;
         color: $pale;
+        border-radius: 10px;
+
+        outline: 0px solid #333;
+        transition: outline-width 0.1s;
     }
 
     input:hover {
-        border: 2px solid #333;
+        outline-width: 2px;
     }
 }
 

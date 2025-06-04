@@ -8,9 +8,9 @@
     min-height: 40dvh;
     height: fit-content;
     width: clamp(150px, 80vw, 400px);
-    box-shadow: 0px 0px 5px $box-shadow;
     background-color: $primary;
     color: $text;
+    border-radius: 10px;
 
     .head {
         
@@ -27,6 +27,21 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+
+            input[type='text'] {
+                border-radius: 10px;
+                padding: 5px;
+                margin: 5px;
+                border: none;
+                background-color: $background;
+            }
+
+            input[type='text']:focus {
+                border: none;
+                box-shadow: none;
+                outline: none;
+            }
+            
         }
 
         .radioInput {
@@ -52,21 +67,27 @@
         button {
             background-color: $background;
             padding: 5px;
+            border-radius: 10px;
             
             transition: all 0.1s;
-            border: 2px solid $box-shadow;
             color: $pale;
         }
     
         button:hover {
-            border: 2px solid #333;
             color: $text;
         }
     }
 }
 
+// Почему 34 😭
+$margin: 34px;
+
 .imageList {
     display: flex;
-    justify-content: center;
+    position: relative;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: min(90vw, 2000px);
+    margin: $margin 0px;
 }

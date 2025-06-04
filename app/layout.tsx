@@ -19,10 +19,11 @@ export default function Layout({
 } : {
     children: React.ReactNode
 }) {
+
     return (
         <html lang='ru' className={manrope.className}>
             <head>
-                <title>Название сайта</title>
+                <title>ඞ</title>
                 <link rel="icon" href="#" />
             </head>
             <body>

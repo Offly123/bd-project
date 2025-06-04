@@ -4,17 +4,24 @@ import React, { useEffect, useState } from 'react'
 
 import { ImageInfo } from '$/ImageCard'
 import AdminImageCard from '$/AdminImageCard';
-
-import style from '@/admin/admin.module.scss'
 import Form from '$/Form';
 import TextInput from '$/TextInput';
+import { getNewShownImages } from 'app/page';
+import Filter from '$/Filter';
+import { FilterRules } from '$/Filter';
+
+import style from '@/admin/admin.module.scss'
 
 
 
 export default function Main() {
 
+    
     const [ imageList, setImageList ] = useState< Array<ImageInfo> >([]);
 
+    const [shownImages, setShownImages ] = useState< Array<ImageInfo>>([]);
+
+    
     // Взятие картинок из БД
     useEffect(() => {
         const foo = async () => {
@@ -24,6 +31,7 @@ export default function Main() {
             if (res.ok) {
                 const fetchData = await res.json();
                 setImageList(fetchData);
+                setShownImages(fetchData);
             } else {
                 console.log('Something went wrong');
             }
@@ -60,14 +68,32 @@ export default function Main() {
         fd.append('file', inputImage.files[0]);
         fd.append('category_id', inputCategory?.value);
         fd.append('tags', inputTags?.value);
-        const res = await fetch('api/addImage', {
+        fetch('api/addImage', {
             method: 'POST',
             body: fd
         });
     }
 
+    const [ filterRuleList, setFilterRuleList ] = useState<FilterRules>({
+        timeFrom: undefined,
+        timeTo: undefined,
+        timeOrder: undefined,
+        tags: [],
+        favoriteOrder: undefined
+    });
+
+    // Фильтрация картинок
+    useEffect(() => {
+        const newShownImages = getNewShownImages(imageList, filterRuleList)
+
+        setShownImages(newShownImages);
+    }, [filterRuleList]);
+
+
+
     return (
         <>
+            <Filter setFilterRuleList={setFilterRuleList} />
             {
                 categoryList && categoryList.length ?
                 <form className={style.form} action='/api/addImage' method='POST'>
@@ -110,16 +136,16 @@ export default function Main() {
             </form> :
             <p>Ошибка при получении категорий</p>
             }
-            <div className={style.imageList}>
+            <section className={style.imageList}>
                 {
-                    imageList && imageList.length ? 
-                    imageList.map((image: ImageInfo, index) => (
+                    shownImages && shownImages.length 
+                        ? shownImages.map((image: ImageInfo, index) => (
                         // Тот самый костыль
                         <AdminImageCard key={index * 100 + 1} imageData={image}/>
-                    )) :
-                    <p>Ошибка при получении картинок</p>
+                        )) 
+                        : <p>Ошибка при получении картинок</p>
                 }
-            </div>
+            </section>
         </>
     )
 }

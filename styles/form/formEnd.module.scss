@@ -15,14 +15,13 @@ $padding: 5px;
     button {
         background-color: $background;
         padding: 5px;
+        border-radius: 10px;
         
         transition: all 0.1s;
-        border: 2px solid $box-shadow;
         color: $pale;
     }
 
     button:hover {
-        border: 2px solid #333;
         color: $text;
     }
 }
