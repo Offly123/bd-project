@@ -23,6 +23,7 @@ export default function FavoriteCard({
             method: 'POST',
             body: JSON.stringify({image_id: imageData.image_id})
         })
+        console.log(imageData.image_id);
         if (res.ok) {
             setIsVisible(false);
         }

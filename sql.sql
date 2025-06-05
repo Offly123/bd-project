@@ -198,7 +198,11 @@ WHERE user_id=? AND image_id=?;
 
 -- Получить список избранных картинок пользователя
 SELECT i.image_id, file_name as src, category_name, COUNT(DISTINCT fi.user_id) as favoriteCount, GROUP_CONCAT(DISTINCT tag) as tags from images i
-JOIN favorite_images fi ON i.image_id=fi.image_id AND fi.user_id=?
+JOIN 
+    favorite_images fi ON i.image_id=fi.image_id AND i.image_id IN (
+        SELECT fi2.image_id FROM favorite_images fi2 
+        WHERE fi2.user_id = ?
+    )
 JOIN categories c ON c.category_id=i.category_id 
 JOIN image_tags it ON i.image_id=it.image_id 
-GROUP BY i.image_id, file_name, category_name 
+GROUP BY i.image_id, file_name, category_name;

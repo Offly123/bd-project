@@ -26,6 +26,7 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     const userId = decodedJwt.payload.userId;
+    console.log(favoriteImageId);
 
 
 
@@ -46,6 +47,7 @@ export async function POST(req: Request): Promise<Response> {
 
 
     await disconnectFromDB(con);
+
 
     
     return new Response(JSON.stringify({id: userId, img: favoriteImageId}));

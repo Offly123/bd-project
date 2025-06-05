@@ -162,6 +162,7 @@ const getFavoritesList = async (
         const favoritesList = fetchData.map((image: ImageInfo) => {
             return image.image_id;
         })
+        console.log(favoritesList);
         setFavoriteList(favoritesList);
     }
 }
