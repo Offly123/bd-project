@@ -51,6 +51,12 @@
         border-radius: 10px;
     }
 
+    .categories {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
     input:hover {
         background-color: $box-shadow;
     }

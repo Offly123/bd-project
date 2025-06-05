@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { ImageInfo } from "$/ImageCard"
 import { findSourceMap } from "module";
@@ -15,6 +15,9 @@ export interface FilterRules {
     timeFrom: number | undefined,
     timeTo: number | undefined,
     timeOrder: 'up' | 'down' | undefined,
+
+    // Какой категории должна быть картинка
+    category: number | undefined,
 
     // Какие теги должны быть у картинки
     tags: Array<string>,
@@ -60,6 +63,13 @@ export default function Filter({
             return {...prevRules, timeOrder: 'down'}
         })
     }
+
+    const changeCategory = (e) => {
+
+        setFilterRuleList((prevRules: FilterRules) => {
+            return {...prevRules, category: e.target.value};
+        })
+    }
     
     const sortByFavorite = (e) => {
         e.preventDefault();
@@ -82,7 +92,30 @@ export default function Filter({
             return {...prevRules, tags: []};
         });
     }
+
+
+
+    const [ categoryList, setCategoryList ] = useState([]);
+
+    // Взятие списка категорий из БД
+    useEffect(() => {
+        const foo = async() => {
+            const res = await fetch('api/categories', {
+                method: 'POST'
+            });
+            if (res.ok) {
+                const fetchData = await res.json();
+                setCategoryList(fetchData);
+            } else {
+                console.log('Something went wrong');
+            }
+        }
+
+        foo();
+    }, []);
     
+
+
     const removeSort = (e) => {
         e.preventDefault();
         
@@ -90,6 +123,7 @@ export default function Filter({
             timeFrom: undefined,
             timeTo: undefined,
             timeOrder: undefined,
+            category: undefined,
             tags: [],
             favoriteOrder: undefined
         });
@@ -119,6 +153,24 @@ export default function Filter({
                 <button onClick={changeTimeOrderDown}>
                     Сначала старые
                 </button>
+            </div>
+
+            <div className={style.categories}>
+                {
+                    categoryList.map((category, index) => {
+                        return (
+                            <div key={index}>
+                                <input 
+                                    id={category.category_name} 
+                                    value={category.category_id} 
+                                    type="radio" name="category" 
+                                    onClick={changeCategory}
+                                />
+                                <label htmlFor={category.category_name}>{category.category_name}</label>
+                            </div>
+                        )
+                    })
+                }
             </div>
 
             <div>

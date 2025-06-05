@@ -78,6 +78,7 @@ export default function Main() {
         timeFrom: undefined,
         timeTo: undefined,
         timeOrder: undefined,
+        category: undefined,
         tags: [],
         favoriteOrder: undefined
     });
@@ -93,7 +94,6 @@ export default function Main() {
 
     return (
         <>
-            <Filter setFilterRuleList={setFilterRuleList} />
             {
                 categoryList && categoryList.length ?
                 <form className={style.form} action='/api/addImage' method='POST'>
@@ -136,6 +136,7 @@ export default function Main() {
             </form> :
             <p>Ошибка при получении категорий</p>
             }
+            <Filter setFilterRuleList={setFilterRuleList} />
             <section className={style.imageList}>
                 {
                     shownImages && shownImages.length 

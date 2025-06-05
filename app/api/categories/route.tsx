@@ -8,25 +8,9 @@ import { connectToDB, disconnectFromDB, showDBError } from "../db";
 
 
 export async function POST(req: Request): Promise<Response> {
-    const cookieStore = await cookies();
-
-    // Получаем JWT из куков
-    const adminJwt: string | undefined = cookieStore.get('session')?.value;
-    if (!adminJwt) {
-        return new Response(JSON.stringify({error: true, message: 'No jwt'}));
-    }
-
-    // Декодируем JWT и проверяем его валидность
-    const decodedJwt: JWT = decodeJWT(adminJwt);
-    const jwtSecret: string | undefined = process.env.JWT_KEY;
-
-    if (!isValideJWT(decodedJwt, jwtSecret) || decodedJwt.payload.role !== 'admin') {
-        cookieStore.delete('session');
-        return new Response(JSON.stringify([]));
-    }
 
 
-
+    
     const con = await connectToDB();
 
 

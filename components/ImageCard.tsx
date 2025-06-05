@@ -7,6 +7,7 @@ export interface ImageInfo {
     image_id: number,
     src: string,
     tags: Array<string>,
+    categoryId: number,
     resolution: string,
     favoriteCount: number,
     uploadTime: number
@@ -14,9 +15,13 @@ export interface ImageInfo {
 
 export default function ImageCard({ 
     imageData,
+    favoritesList,
+    setFavoritesList,
     setShownImages
 }: {
     imageData: ImageInfo
+    favoritesList: Array<number>,
+    setFavoritesList: React.Dispatch< React.SetStateAction< Array<number> > >
     setShownImages: React.Dispatch< React.SetStateAction< Array<ImageInfo> > >
 }) {
 
@@ -29,22 +34,59 @@ export default function ImageCard({
         });
 
         if (!res.ok) { 
-            console.log('Something went wrong');
+            console.error('Something went wrong');
         }
 
         const fetchData = await res.json();
-        if (!fetchData.error) {
-            setFavoriteCount(favoriteCount + 1);
+        if (fetchData.error) {
+            console.error('Something went wrong');
         }
+
+
+        
+        setFavoriteCount(favoriteCount + 1);
 
         setShownImages(prevList => {
             return prevList.map((imageFromList: ImageInfo) => {
                 return imageFromList.image_id === imageData.image_id
-                    ? {...imageFromList, favoriteCount: imageFromList.favoriteCount + 1}
+                ? {...imageFromList, favoriteCount: imageFromList.favoriteCount + 1}
+                : imageFromList
+            });
+        });
+        
+        setFavoritesList((prevValue: Array<number>) => {
+            return [...prevValue, imageData.image_id];
+        })
+    }
+
+    const deleteFavorite = async () => {
+        const res = await fetch('/api/deleteFavorite/', {
+            method: 'POST',
+            body: JSON.stringify({image_id: imageData.image_id})
+        })
+        if (!res.ok) {
+            console.error('Something went wrong')
+        }
+
+        setFavoritesList((prevValue: Array<number>) => {
+            return prevValue.filter((image_id: number) => {
+                return image_id !== imageData.image_id;
+            });
+        })
+
+        setShownImages(prevList => {
+            return prevList.map((imageFromList: ImageInfo) => {
+                return imageFromList.image_id === imageData.image_id
+                    ? {...imageFromList, favoriteCount: imageFromList.favoriteCount - 1}
                     : imageFromList
             });
         });
+
+        setFavoriteCount(favoriteCount - 1);
     }
+
+    // console.log(favoritesList);
+    // console.log(imageData);
 
     return (
         <article className={style.imageCard}>
@@ -52,13 +94,27 @@ export default function ImageCard({
             <div className={style.end}>
                 <p className={style.imageMeta}>
                 {
-                    imageData.tags.map((tag, index) => {
+                    imageData.tags.map((tag) => {
                         return tag + ' ';
                     })
                 }
                 </p>
-                <button onClick={addFavorite} className={style.facorites}>
-                    &#9733; { favoriteCount }
+                <button 
+                    onClick={
+                        favoritesList.includes(imageData.image_id) 
+                        ? deleteFavorite 
+                        : addFavorite
+                        } 
+                    className={style.favorites}>
+                {
+                    favoritesList.includes(imageData.image_id) ? <>&#9733;</> : <>&#9734;</>
+                }
+                { favoriteCount }
+                {
+                    //&#9734;  - пустая
+                    //&#9733;  - заполненная
+                    //&#10005; - крест
+                }
                 </button>
             </div>
         </article>

@@ -14,56 +14,19 @@ export default function Main() {
     
     const [ shownImages, setShownImages ] = useState< Array<ImageInfo> >([]);
     const [ imageList, setImageList] = useState<Array<ImageInfo>>([]);
+    const [ recommendationsList, setRecommendationsList] = useState<Array<ImageInfo>>([]);
+    const [ favoritesList, setFavoritesList] = useState<Array<number>>([]);
     
     
     // Взятие всех картинок из БД
     useEffect(() => {
-        const getImageList = async () => {
-            const res = await fetch('/api/main', {
-                method: 'POST'
-            });
-            if (res.ok) {
-                let fetchData = await res.json();
-                
-                // По стандарту сортируем по дате добавления (от новых к старым)
-                if (fetchData.length)
-                fetchData.sort((a: ImageInfo, b: ImageInfo) => {
-                    return b.uploadTime - a.uploadTime;
-                });
-                
-                // console.log(fetchData);
-                setImageList(fetchData);
-                setShownImages(fetchData);
-            } else {
-                console.log('Something went wrong');
-            }
+        const foo = async () => {
+            await getImageList(setImageList, setShownImages);
+            await getRecommendationsList(setRecommendationsList);
+            await getFavoritesList(setFavoritesList);
         }
-        getImageList();
-    }, []);
 
-    const [ recommendationsList, setRecommendationsList] = useState<Array<ImageInfo>>([]);
-
-    useEffect(() => {
-        const getResommendationsList = async () => {
-            const res = await fetch('/api/recommendations', {
-                method: 'POST'
-            });
-            if (res.ok) {
-                let fetchData = await res.json();
-                
-                // По стандарту сортируем по дате добавления (от новых к старым)
-                if (fetchData.length) {
-                    fetchData.sort((a: ImageInfo, b: ImageInfo) => {
-                        return b.uploadTime - a.uploadTime;
-                    });
-                }
-                
-                setRecommendationsList(fetchData);
-            } else {
-                console.log('Something went wrong');
-            }
-        }
-        getResommendationsList();
+        foo();
     }, []);
     
     
@@ -72,6 +35,7 @@ export default function Main() {
         timeFrom: undefined,
         timeTo: undefined,
         timeOrder: undefined,
+        category: undefined,
         tags: [],
         favoriteOrder: undefined
     });
@@ -96,7 +60,13 @@ export default function Main() {
                         <div className={style.imageList}>
                     {
                         recommendationsList.map((image: ImageInfo, index) => (
-                            <ImageCard key={image.image_id} imageData={image} setShownImages={setShownImages} />
+                            <ImageCard 
+                                key={image.image_id} 
+                                imageData={image} 
+                                setShownImages={setShownImages} 
+                                setFavoritesList={setFavoritesList}
+                                favoritesList={favoritesList}
+                            />
                         )) 
                     }
                     </div>
@@ -108,13 +78,92 @@ export default function Main() {
                 {
                     shownImages && shownImages.length 
                         ? shownImages.map((image: ImageInfo, index) => (
-                        <ImageCard key={image.image_id} imageData={image} setShownImages={setShownImages} />
+                        <ImageCard 
+                            key={image.image_id} 
+                            imageData={image} 
+                            favoritesList={favoritesList}
+                            setFavoritesList={setFavoritesList}
+                            setShownImages={setShownImages} 
+                        />
                         )) 
                         : <p>Пусто</p>
                 }
             </section>
         </>
     )
+}
+
+
+
+const getImageList = async (
+    setImageList  : React.Dispatch< React.SetStateAction< Array<ImageInfo> > >,
+    setShownImages: React.Dispatch< React.SetStateAction< Array<ImageInfo> > >
+) => {
+    const res = await fetch('/api/main', {
+        method: 'POST'
+    });
+    if (res.ok) {
+        let fetchData = await res.json();
+        
+        // По стандарту сортируем по дате добавления (от новых к старым)
+        if (fetchData.length)
+        fetchData.sort((a: ImageInfo, b: ImageInfo) => {
+            return b.uploadTime - a.uploadTime;
+        });
+        
+        // console.log(fetchData);
+        setImageList(fetchData);
+        setShownImages(fetchData);
+    } else {
+        console.log('Something went wrong');
+    }
+}
+
+
+const getRecommendationsList = async (
+    setRecommendationsList : React.Dispatch< React.SetStateAction< Array<ImageInfo> > >
+) => {
+    const res = await fetch('/api/recommendations', {
+        method: 'POST'
+    });
+    if (res.ok) {
+        let fetchData = await res.json();
+        
+        // По стандарту сортируем по дате добавления (от новых к старым)
+        if (fetchData.length) {
+            fetchData.sort((a: ImageInfo, b: ImageInfo) => {
+                return b.uploadTime - a.uploadTime;
+            });
+        }
+        
+        setRecommendationsList(fetchData);
+    } else {
+        console.log('Something went wrong');
+    }
+}
+
+
+
+const getFavoritesList = async (
+    setFavoriteList : React.Dispatch< React.SetStateAction< Array<number> > >
+) => {
+    const response = await fetch('/api/favorites', {
+        method: 'POST'
+    });
+
+    if (!response.ok) {
+        console.log('Ошибка при получении списка избраныных');
+    }
+
+    const fetchData = await response.json();
+
+    
+    if (fetchData.error !== 'true') {
+        const favoritesList = fetchData.map((image: ImageInfo) => {
+            return image.image_id;
+        })
+        setFavoriteList(favoritesList);
+    }
 }
 
 
@@ -152,6 +201,13 @@ export const getNewShownImages = (
                 return a.uploadTime - b.uploadTime
             });
         }
+    }
+
+    // Фильтрация по категориям
+    if (filterRuleList.category) {
+        newShownImages = newShownImages.filter((image: ImageInfo) => {
+            return image.categoryId == filterRuleList.category;
+        });
     }
     
     // Сортировка по избранным

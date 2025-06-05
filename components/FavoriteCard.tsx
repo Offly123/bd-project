@@ -38,13 +38,13 @@ export default function FavoriteCard({
             <div className={style.end}>
                 <p className={style.imageMeta}>
                 {
-                    imageData.tags.map((tag, index) => (
+                    imageData.tags.map((tag) => (
                         tag + ' '
                     ))
                 }
                 </p>
                 <button onClick={deleteFavorite} className={style.favorites}>
-                    &#9733; { imageData.favoriteCount }
+                    &#10005; { imageData.favoriteCount }
                 </button>
             </div>
         </article>
