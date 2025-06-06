@@ -32,11 +32,26 @@ export async function POST(req: Request): Promise<Response> {
 
 
     const sqlImageList = `
-    SELECT i.image_id, file_name as src, category_name, COUNT(DISTINCT fi.user_id) as favoriteCount, GROUP_CONCAT(DISTINCT tag) as tags from images i 
-    LEFT JOIN favorite_images fi ON i.image_id=fi.image_id 
-    JOIN categories c ON c.category_id=i.category_id 
-    JOIN image_tags it ON i.image_id=it.image_id 
-    GROUP BY i.image_id, file_name, category_name;
+    SELECT 
+        i.image_id, 
+        file_name as src, 
+        upload_time as uploadTime, 
+        i.category_id as categoryId, 
+        category_name, 
+        COUNT(DISTINCT fi.user_id) as favoriteCount, 
+        GROUP_CONCAT(DISTINCT tag) as tags 
+    FROM 
+        images i 
+    LEFT JOIN 
+        favorite_images fi ON i.image_id=fi.image_id 
+    JOIN 
+        categories c ON c.category_id=i.category_id 
+    JOIN 
+        image_tags it ON i.image_id=it.image_id 
+    GROUP BY 
+        i.image_id, 
+        file_name, 
+        category_name;
     `;
     let imageList;
     try {
@@ -53,6 +68,7 @@ export async function POST(req: Request): Promise<Response> {
 
 
     imageList.forEach((image) => {
+        image.uploadTime = new Date(image.uploadTime).getTime();
         image.tags = image.tags.split(',');
     });
 

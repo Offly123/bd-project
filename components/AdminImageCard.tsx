@@ -7,7 +7,10 @@ export interface ImageInfo {
     image_id: number,
     src: string,
     tags: Array<string>,
-    favoriteCount: number
+    categoryId: number,
+    resolution: string,
+    favoriteCount: number,
+    uploadTime: number
 }
 
 export default function AdminImageCard({ 
