@@ -33,7 +33,9 @@ export default function AdminImageCard({
     
     return (
         <article className={style.imageCard}>
-            <img className={style.image} src={imageData.src} alt='image.png' />
+            <button className={style.downloadButton}>
+                <img className={style.image} src={imageData.src} alt='image.png' />
+            </button>
             <div className={style.end}>
                 <p className={style.imageMeta}>
                 {

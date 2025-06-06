@@ -40,6 +40,7 @@ export default function ImageCard({
         const fetchData = await res.json();
         if (fetchData.error) {
             console.error('Something went wrong');
+            return;
         }
 
 
@@ -65,7 +66,8 @@ export default function ImageCard({
             body: JSON.stringify({image_id: imageData.image_id})
         })
         if (!res.ok) {
-            console.error('Something went wrong')
+            console.error('Something went wrong');
+            return;
         }
 
         setFavoritesList((prevValue: Array<number>) => {
@@ -85,12 +87,38 @@ export default function ImageCard({
         setFavoriteCount(favoriteCount - 1);
     }
 
+    const downloadImage = async () => {
+        const res = await fetch('/api/downloadImage/', {
+            method: 'POST',
+            body: JSON.stringify({src: imageData.src})
+        });
+
+        if (!res.ok) {
+            console.error('Something went wrong');
+            return;
+        }
+
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = imageData.src.split('/').pop();
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    }
+
     // console.log(favoritesList);
     // console.log(imageData);
 
+
+
     return (
         <article className={style.imageCard}>
-            <img className={style.image} src={imageData.src} alt='image.png' />
+            <button onClick={downloadImage} className={style.downloadButton}>
+                <img className={style.image} src={imageData.src} alt='image.png' />
+            </button>
+
             <div className={style.end}>
                 <p className={style.imageMeta}>
                 {

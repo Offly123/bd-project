@@ -158,11 +158,11 @@ const getFavoritesList = async (
     const fetchData = await response.json();
 
     
-    if (fetchData.error !== 'true') {
+    if (fetchData.error !== true) {
         const favoritesList = fetchData.map((image: ImageInfo) => {
             return image.image_id;
         })
-        console.log(favoritesList);
+        // console.log(favoritesList);
         setFavoriteList(favoritesList);
     }
 }

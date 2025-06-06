@@ -18,10 +18,15 @@ $margin: clamp(1px, 2vw, 10px);
     transition: all 0.1s;
     scale: 1.00;
 
-    .image {
-        border-radius: 10px 10px 0 0;
+    .downloadButton {
         aspect-ratio: 1920 / 1080;
         height: calc(300% * 1080 / 1920);
+        
+        .image {
+            border-radius: 10px 10px 0 0;
+            width: 100%;
+            height: 100%;
+        }
     }
 
     .end {
@@ -35,6 +40,7 @@ $margin: clamp(1px, 2vw, 10px);
         p {
             overflow: hidden;
             text-overflow: ellipsis;
+            text-wrap: nowrap;
             width: 80%;
         }
 
