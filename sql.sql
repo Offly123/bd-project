@@ -54,7 +54,10 @@ VALUES
 ('Celebrities'),
 ('Characters'),
 ('Space'),
-('Cyberpunk');
+('Cyberpunk'),
+('City'),
+('Illustration'),
+('Mystic');
 
 
 
