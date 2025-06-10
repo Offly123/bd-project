@@ -155,6 +155,9 @@ export default function Filter({
                 </button>
             </div>
 
+            <p>
+                Категория:
+            </p>
             <div className={style.categories}>
                 {
                     categoryList.map((category, index) => {

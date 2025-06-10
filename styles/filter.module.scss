@@ -55,6 +55,29 @@
         flex-direction: row;
         justify-content: center;
         flex-wrap: wrap;
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        label {
+            margin: 5px;
+            padding: 6px;
+            width: 100px;
+            text-align: center;
+            border-radius: 10px;
+            
+            transition: all 0.1s;
+            background-color: $primary;
+        }
+
+        label:hover {
+            background-color: $box-shadow;
+        }
+
+        input[type="radio"]:checked + label {
+            background-color: rgb(0, 87, 0);
+        }
     }
 
     input:hover {

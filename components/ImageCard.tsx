@@ -103,9 +103,11 @@ export default function ImageCard({
         const link = document.createElement('a');
         link.href = url;
         link.download = imageData.src.split('/').pop();
+        link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
         link.remove();
+        URL.revokeObjectURL(url);
     }
 
     // console.log(favoritesList);

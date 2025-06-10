@@ -7,7 +7,7 @@
     align-items: center;
     min-height: 40dvh;
     height: fit-content;
-    width: clamp(150px, 80vw, 400px);
+    width: clamp(150px, 90vw, 400px);
     background-color: $primary;
     color: $text;
     border-radius: 10px;
@@ -27,6 +27,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-around;
 
             input[type='text'] {
                 border-radius: 10px;
@@ -44,11 +45,31 @@
             
         }
 
+
         .radioInput {
+            display: flex;
             width: 100%;
 
-            input::before {
-                all: unset;
+            input[type="radio"] {
+                display: none;
+            }
+    
+            label {
+                padding: 6px;
+                width: 100px;
+                text-align: center;
+                border-radius: 10px;
+                
+                transition: all 0.1s;
+                background-color: $primary;
+            }
+    
+            label:hover {
+                background-color: $box-shadow;
+            }
+    
+            input[type="radio"]:checked + label {
+                background-color: rgb(0, 87, 0);
             }
         }
     }
