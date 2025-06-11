@@ -2,16 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 
-import { ImageInfo } from "$/ImageCard"
-import { findSourceMap } from "module";
-
 import style from '@/filter.module.scss';
-import { preconnect } from "next/dist/server/app-render/entry-base";
 
 
 
 export interface FilterRules {
-    // Сортировка по дате ОТ и ДО, по убыванию или возрастанию
+    // Сортировка по дате ОТ и ДО, по убыванию или возрастанию:
     timeFrom: number | undefined,
     timeTo: number | undefined,
     timeOrder: 'up' | 'down' | undefined,

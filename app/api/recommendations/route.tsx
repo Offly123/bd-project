@@ -88,7 +88,7 @@ GROUP BY
     i.image_id, file_name, category_name
 ORDER BY
     favoriteCount DESC
-LIMIT 50;
+LIMIT 9;
     `;
     let imageList;
     try {

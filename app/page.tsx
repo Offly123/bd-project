@@ -51,21 +51,20 @@ export default function Main() {
 
     return (
         <>
-            <Filter setFilterRuleList={setFilterRuleList}/>
             {
                 recommendationsList && recommendationsList.length
-                    ? <>
+                ? <>
                     <section className={style.recommendationsList}> 
                         <h2>Список рекомендаций:</h2>
                         <div className={style.imageList}>
                     {
                         recommendationsList.map((image: ImageInfo, index) => (
                             <ImageCard 
-                                key={image.image_id} 
-                                imageData={image} 
-                                setShownImages={setShownImages} 
-                                setFavoritesList={setFavoritesList}
-                                favoritesList={favoritesList}
+                            key={image.image_id} 
+                            imageData={image} 
+                            setShownImages={setShownImages} 
+                            setFavoritesList={setFavoritesList}
+                            favoritesList={favoritesList}
                             />
                         )) 
                     }
@@ -73,7 +72,8 @@ export default function Main() {
                     </section>
                     </>
                     : ''
-            }
+                }
+            <Filter setFilterRuleList={setFilterRuleList}/>
             <section className={style.imageList}>
                 {
                     shownImages && shownImages.length 
